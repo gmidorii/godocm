@@ -53,3 +53,6 @@ type T struct {
   ```
   x<<8 + y<<16
   ```
+
+## Commentary
+GoはCスタイルの /* */blockコメントとC++スタイルの//lineコメントが提供されている。
