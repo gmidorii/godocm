@@ -29,14 +29,14 @@ gofmtプログラム(`go fmt` として利用でき、それはソースレベ�
   
 例として、structrureのフィールドコメントを並び替える必要はありません。
 `Gofmt` にておこなえます。宣言が下記のように与えられている場合
-```
+```go
 type T struct {
     name string // name of the object
     value int // its value
 }
 ```
 `gofmt` で列をそろえると
-```
+```go
 type T struct {
     name    string // name of the object
     value   int    // its value
@@ -58,4 +58,37 @@ type T struct {
 GoはCスタイルの /* */blockコメントとC++スタイルの//lineコメントが提供されている。  
 Lineコメントは規範がある。blockコメントはほとんどパッケージのコメントとして利用されるが、式内やコードの大規模な表示を向こうにするのに便利です。  
   
-プログラムとWebサーバーのgodocはGoソースを読み込んで、パッケージの内容に関するドキュメントを抽出します。
+プログラムとWebサーバーのgodocはGoソースを読み込んで、パッケージの内容に関するドキュメントを抽出します。改行がない最も上にかかれたコメントは、宣言とともに説明として抽出される。それらのコメントの自然さとスタイルはgodocが生成するドキュメントのクオリティを決定づける。  
+  
+全てのパッケージは `package comment` (package節前のblockコメント)を持つべき。複数のファイルのパッケージの場合、 `package comment` は一つのファイルにのみあればよく、どんなものでも同様である。`package comment` はパッケージの紹介をすべきで、パッケージ全体に関連した情報を提供する。  
+`package comment`はgodocページの最初に出てきて、以下に続く詳細ドキュメントのセットアップをすべきである。
+```go
+/*
+Package regexp implements a simple library for regular expressions.
+
+The syntax of the regular expressions accepted is:
+
+    regexp:
+        concatenation { '|' concatenation }
+    concatenation:
+        { closure }
+    closure:
+        term [ '*' | '+' | '?' ]
+    term:
+        '^'
+        '$'
+        '.'
+        character
+        '[' [ '^' ] character-ranges ']'
+        '(' regexp ')'
+*/
+package regexp
+```
+  
+もしパッケージがシンプルなら、パッケージコメントは簡潔にできうる。
+```go
+// Package path implements utility routines for
+// manipulating slash-separated filename paths.
+```
+  
+コメントは`banners of stars`のような余分なフォーマットは必要ない。生成される出力は固定幅フォント上では表せられないかもしれない、そのためgofmtのようにalignmentのためのスペースに依存せず、それを気にしない。
