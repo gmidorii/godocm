@@ -91,4 +91,4 @@ package regexp
 // manipulating slash-separated filename paths.
 ```
   
-コメントは`banners of stars`のような余分なフォーマットは必要ない。生成される出力は固定幅フォント上では表せられないかもしれない、そのためgofmtのようにalignmentのためのスペースに依存せず、それを気にしない。
+コメントは`banners of stars`のような余分なフォーマットは必要ない。生成される出力は固定幅フォント上では表せられないかもしれない、そのためgofmtのようにalignmentのためのスペースに依存せず、それを気にしない。コメントはplain textを解釈しないため、HTMLや`_this_`のようなアノテーションは逐語的に再現され、それらは利用すべきでない。
