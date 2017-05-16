@@ -92,3 +92,50 @@ package regexp
 ```
   
 コメントは`banners of stars`のような余分なフォーマットは必要ない。生成される出力は固定幅フォント上では表せられないかもしれない、そのためgofmtのようにalignmentのためのスペースに依存せず、それを気にしない。コメントはplain textを解釈しないため、HTMLや`_this_`のようなアノテーションは逐語的に再現され、それらは利用すべきでない。
+godocがするような調整は、プログラムスニペットに適した固定幅フォント上でインデントされたtextを表示する。`fmt package`のパッケージコメントはこれを良い効果として利用している。  
+  
+コンテキストによると、godocはコメントをリフォーマットしないことがあるので、正しいスペルや句読点、文章構造、改行等々を適切に利用できているか注意したほうが良い。  
+  
+パッケージ内では、トップレベルの直前のコメントはパッケージの宣言のためのdoc commentとして機能する。すべてのプログラムの公開された大文字の名称は、doc commentを持つべきである。  
+  
+`Doc comments` は様々な automated presentationsが可能な完全な文章であることが望ましい。はじめの文章は宣言された名称で始まるまとまった一文であるべきである。  
+```
+// Compile parses a regular expression and returns, if successful, a Regexp
+// object that can be used to match against text.
+func Compile(str string) (regexp *Regexp, err error) {
+```
+  
+もしま衣装が常にコメントの最初ならば、godocの出力に`grep`をかける際に役に立つ。あなたが"Compile"という名前を忘れてしまったが、正規表現をパースする関数を探したい場合を想像すると、下記のコマンドを実行することができる。
+```
+$ godoc regexp | grep parse
+```
+  
+もしパッケージ内のすべてのdoc commentが "This function..." で始まった場合、`grep`は名前を思い出すのに役に立たないだろう。しかし、パッケージのコメントが名称ではじまることによって、探したい言葉を思い出させるような何かを見つけうるだろう。
+```
+$ godoc regexp | grep parse
+    Compile parses a regular expression and returns, if successful, a Regexp
+    parsed. It simplifies safe initialization of global variables holding
+    cannot be parsed. It simplifies safe initialization of global variables
+$
+```
+  
+Goの宣言方法は文法上、グループにまとめての宣言が可能となっている。一つのdoc commentが関連した定数や変数のグループを紹介することができる。全体的な宣言となるため、そのようなコメントは形式的になりがちである。
+```
+// Error codes returned by failures to parse an expression.
+var (
+    ErrInternal      = errors.New("regexp: internal error")
+    ErrUnmatchedLpar = errors.New("regexp: unmatched '('")
+    ErrUnmatchedRpar = errors.New("regexp: unmatched ')'")
+    ...
+)
+```
+  
+グルーピングはアイテム間の関係性を示しうる。(変数のセットがmutexによってプロテクトされているような例)
+```
+var (
+    countLock   sync.Mutex
+    inputCount  uint32
+    outputCount uint32
+    errorCount  uint32
+)
+```
